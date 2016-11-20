@@ -9,6 +9,15 @@ defmodule Pedro.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :browser_session do
+    plug Guardian.Plug.VerifySession
+    plug Guardian.Plug.LoadResource
+  end
+
+  pipeline :auth do
+    plug Guardian.Plug.EnsureAuthenticated, handler: Pedro.SessionController
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -16,11 +25,15 @@ defmodule Pedro.Router do
   scope "/", Pedro do
     pipe_through :browser # Use the default browser stack
 
-    get "/", PageController, :index
-  end
+    resources "/users", UserController, only: [:new, :create]
+    resources "/sessions", SessionController, only: [:new, :create, :delete]
 
-  # Other scopes may use custom stacks.
-  # scope "/api", Pedro do
-  #   pipe_through :api
-  # end
+    get "/", SessionController, :new
+
+    scope "/dashboard" do
+      pipe_through [:browser_session, :auth]
+
+      get "/", DashboardController, :index
+    end
+  end
 end
