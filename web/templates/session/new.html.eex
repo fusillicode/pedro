@@ -7,5 +7,5 @@
     <%= password_input f, :password, placeholder: "Password", class: "form-control" %>
   </div>
 
-  <%= submit "Log in", class: "btn btn-primary" %>
+  <%= submit gettext("Log in"), class: "btn btn-primary" %>
 <% end %>

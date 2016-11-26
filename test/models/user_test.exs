@@ -3,16 +3,16 @@ defmodule Pedro.UserTest do
 
   alias Pedro.User
 
-  @valid_attrs %{email: "some content", password_hash: "some content"}
+  @valid_attrs %{email: "johndoe@test.com", password: "securepass", password_confirmation: "securepass"}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do
-    changeset = User.changeset(%User{}, @valid_attrs)
+    changeset = User.registration_changeset(%User{}, @valid_attrs)
     assert changeset.valid?
   end
 
   test "changeset with invalid attributes" do
-    changeset = User.changeset(%User{}, @invalid_attrs)
+    changeset = User.registration_changeset(%User{}, @invalid_attrs)
     refute changeset.valid?
   end
 end
